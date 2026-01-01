@@ -109,14 +109,14 @@ Schemas will be accessible to users as follows:
 
 Any role that has access to a schema is assumed to have ALL necessary permissions for objects in that schema, viz.:
 
-| Object                            | Privileges                     | Default |
-| --------------------------------- | ------------------------------ | :-----: |
-| schema                            | usage                          |   yes   |
-| tables, views, materialized views | select, insert, update, delete |   yes   |
-| sequences                         | usage, select                  |   yes   |
-| functions                         | execute                        |   yes   |
-| procedures                        | execute                        |   yes   |
-| types                             | usage                          |   yes   |
+| Object             | Privileges                     | Default |
+| ------------------ | ------------------------------ | :-----: |
+| schema             | usage                          |   yes   |
+| tables (and views) | select, insert, update, delete |   yes   |
+| sequences          | usage, select                  |   yes   |
+| functions          | execute                        |   yes   |
+| procedures         | execute                        |   yes   |
+| types              | usage                          |   yes   |
 
 ### 3. Search Path Hardening
 

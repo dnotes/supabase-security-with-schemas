@@ -5,7 +5,16 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "db": "pnpm run",
+    "test": "vitest --no-watch",
+    "test:ci": "vitest --no-watch",
+    "test:watch": "vitest",
+    "start": "supabase start",
+    "stop": "supabase stop",
+    "destroy": "supabase stop --no-backup",
+    "reset": "supabase db reset && pnpm run test",
+    "migration": "read -p 'What changed? ' change; [ -z \"$change\" ] && exit 0; supabase db diff -f \"$change\" && echo 'Now run pnpm db reset.'",
+    "up": "supabase migration up && pnpm run test"
   },
   "keywords": [],
   "author": "",
