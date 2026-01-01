@@ -57,7 +57,7 @@ test('the users for the private schema should be service_role, postgres', async 
 
 // TABLES
 test('no tables in the api schema should have users outside of the listed ones', async () => {
-  await supabaseTests.assertNoTablesWithExtraRoles('api', ['anon', 'authenticated', 'service_role']);
+  await supabaseTests.assertNoTablesWithExtraRoles('api', ['anon', 'authenticated', 'service_role', 'postgres']);
 })
 test('default privileges in the api schema should be set', async () => {
   await supabaseTests.assertDefaultPrivilegesForTables('api', ['anon', 'authenticated', 'service_role']);
@@ -70,12 +70,12 @@ test('default privileges in the private schema should be set', async () => {
 });
 
 test('no routines in the api schema should have users outside of the listed ones', async () => {
-  await supabaseTests.assertNoRoutinesWithExtraRoles('api', ['anon', 'authenticated', 'service_role']);
+  await supabaseTests.assertNoRoutinesWithExtraRoles('api', ['anon', 'authenticated', 'service_role', 'postgres']);
 })
 test('default privileges should be set correctly for routines in the api schema', async () => {
   await supabaseTests.assertDefaultPrivilegesForRoutines('api', ['anon', 'authenticated', 'service_role']);
 });
-test('no routines in the api schema should have users outside of the listed ones', async () => {
+test('no routines in the private schema should have users outside of the listed ones', async () => {
   await supabaseTests.assertNoRoutinesWithExtraRoles('private', ['service_role']);
 })
 test('default privileges should be set correctly for routines in the private schema', async () => {

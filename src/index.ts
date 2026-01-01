@@ -191,7 +191,6 @@ export class SupabaseTests {
     expect(res.rows.length).toBeGreaterThan(0);
 
     const config = res.rows[0]!.setconfig || [];
-    console.log(config);
     const searchPathEntry = config.find(c => c.toLowerCase().startsWith('search_path='));
 
     // 2. Ensure the search_path setting exists in the role config
