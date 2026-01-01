@@ -17,33 +17,29 @@ export class SupabaseTests {
   }
 
   async assertRLSEnabledForTablesAndMaterializedViews(schema:string) {
-    // This SQL query selects the names of tables and materialized views in the 'api' schema
-    // where RLS is NOT enabled (relrowsecurity is false).
+    // This SQL query selects the names of tables in the schema where RLS is NOT enabled.
     // Note: Regular views (relkind = 'v') cannot have RLS and inherit security from base tables.
+    // Note: Materialized views (relkind = 'm') cannot have RLS enabled - it's not supported in PostgreSQL.
     const query = `
       SELECT
-        c.relname AS table_name,
-        CASE c.relkind
-          WHEN 'r' THEN 'table'
-          WHEN 'm' THEN 'materialized view'
-        END AS object_type
+        c.relname AS table_name
       FROM
         pg_catalog.pg_class c
       JOIN
         pg_catalog.pg_namespace n ON n.oid = c.relnamespace
       WHERE
         n.nspname = $1
-        AND c.relkind IN ('r', 'm') -- 'r' = table, 'm' = materialized view
+        AND c.relkind = 'r'
         AND c.relrowsecurity IS FALSE;
     `;
   
     try {
       const res = await this.client.query(query, [schema]) as { rows: { table_name: string, object_type: string }[] };
-      const objectsWithoutRLS = res.rows.map(row => `${row.table_name} (${row.object_type})`);
+      const objectsWithoutRLS = res.rows.map(row => `${row.table_name}`);
   
       // If objectsWithoutRLS is empty, the test passes.
       // If it contains any names, the test fails, and we list them.
-      expect(objectsWithoutRLS.length, `Objects without RLS:\n  ${objectsWithoutRLS.join('\n  ')}\n`).toBe(0);
+      expect(objectsWithoutRLS.length, `Tables without RLS:\n  ${objectsWithoutRLS.join('\n  ')}\n`).toBe(0);
   
     } catch (err) {
       throw err;

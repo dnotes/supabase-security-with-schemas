@@ -66,9 +66,18 @@ describe.sequential('assertRLSEnabledForTablesAndMaterializedViews', async () =>
     await supabaseTests.assertRLSEnabledForTablesAndMaterializedViews('api');
   })
 
+  test('the test passes if a materialized view does not have RLS enabled', async () => {
+    await client.query(`
+      CREATE MATERIALIZED VIEW IF NOT EXISTS api.test_materialized_view AS
+      SELECT 1 AS id, 'test' AS name;
+    `)
+    await supabaseTests.assertRLSEnabledForTablesAndMaterializedViews('api');
+  })
+
   afterAll(async () => {
     await client.query(`
       DROP TABLE IF EXISTS api.test_table;
+      DROP MATERIALIZED VIEW IF EXISTS api.test_materialized_view;
     `)
   })
   
